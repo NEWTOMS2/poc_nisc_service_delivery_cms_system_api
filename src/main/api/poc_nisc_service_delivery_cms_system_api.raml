@@ -92,8 +92,8 @@ types:
         is: [errorLibrary.errorHandleable]
         body: 
           application/json:
-            type: FullServiceResponse
-            example: !include examples/CreatedServiceOrderMessage.json
+            type: serviceLibrary.service
+            example: !include examples/UpdateServiceOrderMessage.json
         responses:
           200:
             description: The Serivice Order was updated

@@ -1,13 +1,23 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<mule xmlns="http://www.mulesoft.org/schema/mule/core" xmlns:doc="http://www.mulesoft.org/schema/mule/documentation" xmlns:munit="http://www.mulesoft.org/schema/mule/munit" xmlns:spring="http://www.springframework.org/schema/beans" xmlns:core="http://www.mulesoft.org/schema/mule/core" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.mulesoft.org/schema/mule/munit http://www.mulesoft.org/schema/mule/munit/current/mule-munit.xsd
+<mule xmlns:mock="http://www.mulesoft.org/schema/mule/mock" xmlns="http://www.mulesoft.org/schema/mule/core" xmlns:doc="http://www.mulesoft.org/schema/mule/documentation" xmlns:munit="http://www.mulesoft.org/schema/mule/munit" xmlns:spring="http://www.springframework.org/schema/beans" xmlns:core="http://www.mulesoft.org/schema/mule/core" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.mulesoft.org/schema/mule/munit http://www.mulesoft.org/schema/mule/munit/current/mule-munit.xsd
 http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-current.xsd
-http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd">
-    <munit:config name="munit" doc:name="MUnit configuration"/>
+http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd
+http://www.mulesoft.org/schema/mule/mock http://www.mulesoft.org/schema/mule/mock/current/mule-mock.xsd">
+    <munit:config mock-connectors="false" mock-inbounds="false" name="munit" doc:name="MUnit configuration"/>
     <spring:beans>
         <spring:import resource="classpath:poc_nisc_service_delivery_cms_system_api.xml"/>
+        <spring:import resource="classpath:poc_nisc_service_delivery_system_api_config.xml"/>
+        <spring:import resource="classpath:service_delivery_system_api_business.xml"/>
+        <spring:import resource="classpath:messages-for-test-suite.xml"/>
     </spring:beans>
-    <munit:test name="poc_nisc_service_delivery_cms_system_api-test-suite-put:/service/order/{id}:application/json:poc_nisc_service_delivery_cms_system_api-configTest" description="Test">
-        <flow-ref name="put:/service/order/{id}:application/json:poc_nisc_service_delivery_cms_system_api-config" doc:name="Flow-ref to put:/service/order/{id}:application/json:poc_nisc_service_delivery_cms_system_api-config"/>
+    <munit:test name="poc_nisc_service_delivery_cms_system_api-test-suite-setResponseContentTypeTest" description="Test">
+        <munit:set-null-payload doc:name="Set Null Payload"/>
+        <flow-ref name="setResponseContentType" doc:name="Flow-ref to setResponseContentType"/>
+        <mock:verify-call messageProcessor=".*:.*" doc:name="Verify Call">
+            <mock:with-attributes>
+                <mock:with-attribute name="doc:name" whereValue="#['Property']"/>
+            </mock:with-attributes>
+        </mock:verify-call>
     </munit:test>
 </mule>
